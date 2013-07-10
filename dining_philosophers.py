@@ -42,20 +42,18 @@ class Philosopher(Thread):
     def _eat(self):
         print "Philosopher# %d is hungry" % self.id
 
-        self.semaphore.acquire()
-        self.left_fork.grab(self.id)
-        sleep(3)
-        self.right_fork.grab(self.id)
+        with self.semaphore:
+            self.left_fork.grab(self.id)
+            sleep(3)
+            self.right_fork.grab(self.id)
 
-        print "Philosopher# %d is eating" % self.id
+            print "Philosopher# %d is eating" % self.id
 
-        sleep(randint(1, 3))
-        self.left_fork.lay_down(self.id)
-        self.right_fork.lay_down(self.id)
+            sleep(randint(1, 3))
+            self.left_fork.lay_down(self.id)
+            self.right_fork.lay_down(self.id)
 
-        print "Philosopher# %d finished eating" % self.id
-
-        self.semaphore.release()
+            print "Philosopher# %d finished eating" % self.id
 
 
 if __name__ == "__main__":
