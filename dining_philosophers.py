@@ -23,11 +23,11 @@ class Fork(object):
 
 
 class Philosopher(Thread):
-    def __init__(self, id, left, right, sem=None, *args, **kwargs):
+    def __init__(self, id, left_fork, right_fork, sem, *args, **kwargs):
         super(Philosopher, self).__init__(*args, **kwargs)
         self.id = id
-        self.left = left
-        self.right = right
+        self.left_fork = left_fork
+        self.right_fork = right_fork
         self.semaphore = sem
 
     def run(self):
@@ -43,15 +43,15 @@ class Philosopher(Thread):
         print "Philosopher# %d is hungry" % self.id
 
         self.semaphore.acquire()
-        self.left.grab(self.id)
+        self.left_fork.grab(self.id)
         sleep(3)
-        self.right.grab(self.id)
+        self.right_fork.grab(self.id)
 
         print "Philosopher# %d is eating" % self.id
 
         sleep(randint(1, 3))
-        self.left.lay_down(self.id)
-        self.right.lay_down(self.id)
+        self.left_fork.lay_down(self.id)
+        self.right_fork.lay_down(self.id)
 
         print "Philosopher# %d finished eating" % self.id
 
@@ -75,5 +75,3 @@ if __name__ == "__main__":
     # Start each philosopher
     for n in range(NUM):
         philosophers[n].start()
-
-
